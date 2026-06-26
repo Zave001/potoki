@@ -3,6 +3,14 @@ import './App.css'
 
 const tabs = ['скоро', 'скоро', 'скоро']
 
+function Hamburger({ open, onClick }) {
+  return (
+    <button className={`hamburger ${open ? 'open' : ''}`} onClick={onClick} aria-label="меню">
+      <span /><span /><span />
+    </button>
+  )
+}
+
 function HomePage() {
   return (
     <main className="home">
@@ -33,20 +41,27 @@ function SoonPage() {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const handleTab = (i) => {
+    setActiveTab(i)
+    setMenuOpen(false)
+  }
 
   return (
     <div className="app">
       <header className="header">
-        <div className="logo" onClick={() => setActiveTab(null)}>
+        <div className="logo" onClick={() => { setActiveTab(null); setMenuOpen(false) }}>
           <img src="/potok.jpg" alt="logo" className="logo-img" />
           <span className="logo-text">Бесконечные потоки</span>
         </div>
-        <nav className="nav">
+        <Hamburger open={menuOpen} onClick={() => setMenuOpen(o => !o)} />
+        <nav className={`nav ${menuOpen ? 'nav--open' : ''}`}>
           {tabs.map((tab, i) => (
             <button
               key={i}
               className={`nav-btn ${activeTab === i ? 'active' : ''}`}
-              onClick={() => setActiveTab(i)}
+              onClick={() => handleTab(i)}
             >
               {tab}
             </button>
